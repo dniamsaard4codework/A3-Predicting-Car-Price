@@ -59,7 +59,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
   deploy:
-    environment: Production
+    environment: Assignment_3
     needs: build-test
     runs-on: ubuntu-latest
     steps:
