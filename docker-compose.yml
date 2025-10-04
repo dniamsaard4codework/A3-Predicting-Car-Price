@@ -1,0 +1,36 @@
+services:
+  web:
+    image: dniamsaard4codework/st126235_car_price_app:a3.0
+    #image: car-price-predictor:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./app:/app
+    container_name: a3-car-price-predictor
+    ports:
+      - "8050:8050"                   # host:container
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8050
+      - DEBUG=False
+      - PYTHONPATH=/app
+      - MLFLOW_TRACKING_URI=https://mlflow.ml.brain.cs.ait.ac.th/
+      - MLFLOW_TRACKING_USERNAME=admin
+      - MLFLOW_TRACKING_PASSWORD=password
+      - REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+      - SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+    restart: unless-stopped
+    healthcheck:
+      # INSIDE the container your app listens on 8050, not 80
+      test: ["CMD", "curl", "-f", "http://localhost:8050/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - car-price-network
+
+networks:
+  car-price-network:
+    driver: bridge
