@@ -73,6 +73,8 @@ jobs:
           proxy_username: ${{ secrets.USERNAME }}
           proxy_key: ${{ secrets.KEY }}
           script: |
-            tag=${{ github.ref_name }} docker compose down
-            tag=${{ github.ref_name }} docker compose up -d
+            cd ~/A3-Predicting-Car-Price
+            export tag=${{ github.ref_name }}
+            docker compose down
+            docker compose up -d
   

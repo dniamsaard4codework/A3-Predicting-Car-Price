@@ -1,6 +1,6 @@
 services:
   web:
-    image: dniamsaard4codework/st126235_car_price_app:a3.0
+    image: dniamsaard4codework/st126235_car_price_app:${tag:-latest}
     restart: always
     environment:
       - HOST=0.0.0.0
