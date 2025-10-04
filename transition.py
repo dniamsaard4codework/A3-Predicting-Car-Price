@@ -28,34 +28,42 @@ def transition_to_production():
         
         print(f"Attempting to transition {model_name} from staging to production...")
         
-        # Get the latest version in staging
-        staging_versions = client.get_latest_versions(model_name, stages=["staging"])
+        # Get all model versions and find staging ones
+        all_versions = client.search_model_versions(f"name='{model_name}'")
+        staging_versions = [v for v in all_versions if hasattr(v, 'current_stage') and v.current_stage == "Staging"]
+        
+        # Show current model status
+        print(f"Found {len(all_versions)} total model versions for {model_name}")
+        for version in all_versions:
+            stage = getattr(version, 'current_stage', 'None')
+            print(f"  Version {version.version}: {stage}")
         
         if not staging_versions:
             print("No model found in staging. Nothing to transition.")
-            return False
+            print("This is normal - either no models are staged or they've already been promoted.")
+            return True  # This is a successful scenario, not an error
         
         latest_staging = staging_versions[0]
         print(f"Found staging model version: {latest_staging.version}")
         
         # Archive any existing production models
         try:
-            production_versions = client.get_latest_versions(model_name, stages=["production"])
+            production_versions = [v for v in all_versions if hasattr(v, 'current_stage') and v.current_stage == "Production"]
             for prod_version in production_versions:
                 print(f"Archiving existing production version: {prod_version.version}")
                 client.transition_model_version_stage(
                     name=model_name,
                     version=prod_version.version,
-                    stage="archived"
+                    stage="Archived"
                 )
         except Exception as e:
-            print(f"Note: No existing production models to archive: {e}")
+            print(f"Note: No existing production models to archive or archiving failed: {e}")
         
         # Transition staging to production
         client.transition_model_version_stage(
             name=model_name,
             version=latest_staging.version,
-            stage="production"
+            stage="Production"
         )
         
         print(f"Successfully transitioned model version {latest_staging.version} to production!")
