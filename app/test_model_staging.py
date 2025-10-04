@@ -11,40 +11,8 @@ importlib.reload(LoadA3model)
 # Try to import a2_preprocessor, but handle if it fails
 try:
     import app
-    # Force app to load by accessing its global variables (this will trigger the loading)
     a2_preprocessor = getattr(app, 'a2_preprocessor', None)
-    if a2_preprocessor is None:
-        # Try to load the model package directly if it's available in the container
-        import joblib
-        import os
-        
-        A2_MODEL_PATHS = [
-            "./best_model.pkl",
-            "./model/best_model.pkl", 
-            "../model/best_model.pkl",
-            "./app/model/best_model.pkl",
-        ]
-        
-        for model_path in A2_MODEL_PATHS:
-            if os.path.exists(model_path):
-                try:
-                    a2_model_package = joblib.load(model_path)
-                    a2_preprocessor = a2_model_package['preprocessor']
-                    print(f"Loaded a2_preprocessor from {model_path}")
-                    break
-                except Exception as e:
-                    print(f"Failed to load from {model_path}: {e}")
-                    continue
-        
-        if a2_preprocessor is None:
-            print("Warning: a2_preprocessor not found - creating a mock for testing")
-            # Create a mock preprocessor for testing
-            from unittest.mock import Mock
-            a2_preprocessor = Mock()
-            a2_preprocessor.transform = Mock(return_value=[[1, 2, 3, 4, 5, 6, 7, 8, 9]])  # Mock transformed features
-            
-except ImportError as e:
-    print(f"Import error: {e}")
+except ImportError:
     a2_preprocessor = None
 
 def test_load_model():
@@ -54,15 +22,6 @@ def test_load_model():
 @pytest.mark.depends(on=["test_load_model"])
 def test_model_input():
     a3_model = LoadA3model.a3_model
-    
-    # Skip test if a3_model is None
-    if a3_model is None:
-        pytest.skip("A3 model not available - skipping input test")
-    
-    # Skip test if a2_preprocessor is None
-    if a2_preprocessor is None:
-        pytest.skip("A2 preprocessor not available - skipping input test")
-    
     # Create synthetic data matching your car price structure
     synthetic_data = {
         'year': [2014],
@@ -83,15 +42,6 @@ def test_model_input():
 @pytest.mark.depends(on=["test_model_input"])
 def test_model_output():
     a3_model = LoadA3model.a3_model
-    
-    # Skip test if a3_model is None
-    if a3_model is None:
-        pytest.skip("A3 model not available - skipping output test")
-    
-    # Skip test if a2_preprocessor is None
-    if a2_preprocessor is None:
-        pytest.skip("A2 preprocessor not available - skipping output test")
-    
     # Create synthetic data
     synthetic_data = {
         'year': [2014, 2015],

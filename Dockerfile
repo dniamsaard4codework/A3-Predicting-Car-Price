@@ -45,8 +45,17 @@ COPY --from=builder --chown=appuser:appuser /app/.venv /opt/venv
 COPY --chown=appuser:appuser app/app.py ./
 COPY --chown=appuser:appuser app/A2modelandprep.py ./
 COPY --chown=appuser:appuser app/A3model.py ./
+COPY --chown=appuser:appuser app/LoadA3model.py ./
 COPY --chown=appuser:appuser app/model/ ./model/
 COPY --chown=appuser:appuser data/ ./data/
+
+# Copy tests for CI/CD
+COPY --chown=appuser:appuser tests/conftest.py ./tests/
+COPY --chown=appuser:appuser tests/test_model_staging.py ./tests/
+COPY --chown=appuser:appuser tests/test_app_callbacks.py ./tests/
+
+# Copy transition script for staging workflow
+COPY --chown=appuser:appuser transition.py ./
 
 # Copy notebooks and data (commented out for now)
 # COPY --chown=appuser:appuser notebook/ ./notebook/
