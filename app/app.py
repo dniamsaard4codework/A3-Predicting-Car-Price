@@ -167,7 +167,7 @@ app.index_string = '''
 def create_navbar(current_page):
     return html.Div([
         html.Div([
-            html.A("Car Price Predictor v1.0.4", href="/", className="nav-logo"), # Updated version number
+            html.A("Car Price Predictor v1.0.5", href="/", className="nav-logo"), # Updated version number
             html.Div([
                 html.A("Instructions", 
                       href="/", 
