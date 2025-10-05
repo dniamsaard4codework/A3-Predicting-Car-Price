@@ -167,7 +167,7 @@ app.index_string = '''
 def create_navbar(current_page):
     return html.Div([
         html.Div([
-            html.A("Car Price Predictor v1.0.5", href="/", className="nav-logo"), # Updated version number
+            html.A("Car Price Predictor v1.0.6", href="/", className="nav-logo"), # Updated version number
             html.Div([
                 html.A("Instructions", 
                       href="/", 
@@ -266,7 +266,7 @@ def instructions_layout():
                         
                         html.P("Best Model Configuration:", style={'fontWeight': 'bold', 'color': '#8e44ad', 'marginBottom': '8px'}),
                         html.Div([
-                            html.P("Simple Logistic Regression with minibatch gradient descent with learning rate 0.001", 
+                            html.P("Ridge Logistic Regression with minibatch gradient descent with learning rate 0.001", 
                                    style={'fontFamily': 'monospace', 'backgroundColor': '#f1f3f4', 'padding': '10px', 'borderRadius': '5px', 'color': '#2c3e50', 'marginBottom': '5px'}),
                             html.P("Deployed via MLflow Model Registry for consistent access.", 
                                    style={'fontSize': '14px', 'color': '#666', 'fontStyle': 'italic'})
