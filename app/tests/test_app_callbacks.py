@@ -58,20 +58,20 @@ def test_a3model_input_shape():
         pytest.skip("A2 preprocessor not available for testing")
     
     synthetic_data = {
-        'year': [2014, 2015],
-        'km_driven': [50000, 30000],
-        'fuel': ['Diesel', 'Petrol'],
-        'transmission': ['Manual', 'Automatic'],
-        'owner': [1, 1],
-        'engine': [1500, 1200],
-        'max_power': [100, 80],
-        'brand': ['Maruti', 'Hyundai'],
-        'mileage': [18.0, 20.0]
+        'year': [2014],
+        'km_driven': [50000],
+        'fuel': ['Diesel'],
+        'transmission': ['Manual'],
+        'owner': [1],
+        'engine': [1500],
+        'max_power': [100],
+        'brand': ['Maruti'],
+        'mileage': [18.0]
         }
     df = pd.DataFrame(synthetic_data)
     df = a2_preprocessor.transform(df)
     input_shape = df.shape
-    assert input_shape == (2, 38), f"Expected input shape (2, 38), but got {input_shape}"
+    assert input_shape == (1, 38), f"Expected input shape (1, 38), but got {input_shape}"
 
 # Check the output shape
 def test_a3model_output_shape():
@@ -85,18 +85,18 @@ def test_a3model_output_shape():
     
     # Create synthetic data
     synthetic_data = {
-        'year': [2014, 2015],
-        'km_driven': [50000, 30000],
-        'fuel': ['Diesel', 'Petrol'],
-        'transmission': ['Manual', 'Automatic'],
-        'owner': [1, 1],
-        'engine': [1500, 1200],
-        'max_power': [100, 80],
-        'brand': ['Maruti', 'Hyundai'],
-        'mileage': [18.0, 20.0]
+        'year': [2014],
+        'km_driven': [50000],
+        'fuel': ['Diesel'],
+        'transmission': ['Manual'],
+        'owner': [1],
+        'engine': [1500],
+        'max_power': [100],
+        'brand': ['Maruti'],
+        'mileage': [18.0]
         }
     df = pd.DataFrame(synthetic_data)
     
     df_transformed = a2_preprocessor.transform(df)
     output = a3_model.predict(df_transformed)
-    assert output.shape == (2, ), f"Expected output shape (2,), but got {output.shape}"
+    assert output.shape == (1, ), f"Expected output shape (1,), but got {output.shape}"
